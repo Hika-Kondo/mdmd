@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mdmd:
+    runtime: nvidia
+    user: $UID:$GID
+    build:
+      context: .
+      args:
+        UID: $UID
+        GID: $GID
+        UNAME: $UNAME
+    volumes:
+      - ./make_dataset:/make_dataset
+      - ./train:/train
+      - ./input:/input
+      - ./res:/res
+    # command: python /make_dataset/01-make-datasets.py -i /input/Protein-coord.xvg /input/Protein-force.xvg 0 100 --gro /input/solv_ions_prot.gro -f
+    command: python /train/02-learning.py -i /res/01-make-datasets/datasets.hdf5 -a CA
